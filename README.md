@@ -4,7 +4,7 @@ Scripts to fit and explore word embedding models augmented with political metada
 
 ## Description
 
-This is a pre-release of the replication scripts for the study cited below.  The scripts are organized as a Python module and the trained models will be made available soon.  Consult the file examples.ipynb for example usage.
+This is a pre-release of the replication scripts for the study cited below.  The scripts are organized as a Python module and the trained models will be made available soon.  Consult the file examples.ipynb for a tutorial.
 
 ## Citation
 
