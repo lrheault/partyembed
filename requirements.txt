@@ -1,0 +1,7 @@
+scipy==1.1.0
+matplotlib==2.2.2
+pandas==0.23.1
+setuptools==33.1.1
+gensim==3.5.0
+numpy==1.14.5
+scikit_learn==0.19.2
