@@ -15,15 +15,16 @@ MODEL_PATH = pkg_resources.resource_filename('partyembed', 'models/')
 
 class Validate(object):
 
-    def __init__(self, model, country='USA', method='pca', custom_lexicon=None):
+    def __init__(self, model, country='USA', method='pca', custom_lexicon=None, chamber='House'):
 
         self.model = model
+        self.chamber = chamber
         self.M = self.model.vector_size
         self.country = country
         self.method = method
         self.custom_lexicon = custom_lexicon
         self.label_dict = party_labels(self.country)
-        self.parties, _ = party_tags(self.model, self.country)
+        _, self.parties, _ = party_tags(self.model, self.country)
         self.labels = [self.label_dict[p] for p in self.parties]
         self.P = len(self.parties)
         self.components = 1
@@ -60,8 +61,9 @@ class Validate(object):
 
         input_file = DATA_PATH + 'goldstandard_' + self.country.lower() + '.csv'
         ref = pd.read_table(input_file, sep=',',encoding='utf-8',header=0)
+        if self.country=='USA':
+            ref = ref[ref.chamber==self.chamber]            
         ref = ref.merge(Z, on='label', how='left')
-
         return ref
 
     def accuracy(self, goldscores, testscores):
