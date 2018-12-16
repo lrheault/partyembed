@@ -10,7 +10,7 @@ BASE_LEXICON = [['affordable_housing','decent_housing','eradicate_poverty','pove
                 'unequal','workers','minimum_wage','unemployment','unemployed','protective_tariff','redistribution','redistribution_wealth',
                 'safety_net','social_security','homelessness','labor_unions','labour_unions','trade_unions','working_classes'],
                 ['decentralization','bureaucracy','business','businesses','creating_jobs','job_creators','free_enterprise','free_trade',
-                'private_enterprise','private_sector','debt_relief','debt_reduction','taxpayers','taxpayers_money','taxpayer_money',
+                'debt_relief','debt_reduction','taxpayers','taxpayers_money','taxpayer_money',
                 'commerce','privatisation','privatization','competitive','industry','productivity','deficit_reduction','hard_working','hardworking',
                 'home_owners','homeowners','open_market','free_market','private_enterprise','private_sector','property_rights','property_owners'],
                 ['minority_rights','gay_lesbian','affirmative_action','employment_equity','pay_equity','racial_minorities','racism','gun_control',
