@@ -56,7 +56,7 @@ class corpusIterator(object):
                         self.words = self.bigram[tokens]
                     else:
                         self.words = tokens
-                    self.tags = [partycg, cgtag]
+                    self.tags = [partytag, congresstag]
                     yield self.speeches(self.words, self.tags)
 
 class phraseIterator(object):
@@ -78,8 +78,8 @@ if __name__=='__main__':
 
     # Fill in the paths to desired location.
     # Corpus is expected to be in tab-separated format with column ordering specified in
-    # reformat_congress.py, and clean text in column #10. 
-    
+    # reformat_congress.py, and clean text in column #10.
+
     inpath = '.../congress'
     savepath = '.../usa/'
 
@@ -87,7 +87,7 @@ if __name__=='__main__':
     bigram = Phraser(phrases)
     tphrases = Phrases(bigram[phraseIterator(inpath, house='H')])
     trigram = Phraser(tphrases)
-    
+
     # To save phraser objects for future usage.
     # bigram.save('.../phraser_bigrams')
     # trigram.save('.../phraser_trigrams')
