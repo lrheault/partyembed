@@ -9,57 +9,40 @@ from partyembed.utils.guided import BASE_LEXICON
 
 class Interpret(object):
     
-    def __init__(self, model, parties, Z, labels, voc_size=20000, custom_vocab=None):
+    def __init__(self, model, parties, dr, Z, labels, rev1=False, rev2=False, min_count=100, max_count = 1000000, max_features=10000):
 
         self.model = model
         self.parties = parties
         self.labels = labels
         self.P = len(self.parties)
         self.M = self.model.vector_size   
-        if custom_vocab:
-            if custom_vocab=='default':
-                self.V = len(BASE_LEXICON)
-                selv.voc=[]
-                for w in BASE_LEXICON:
-                    if self.model.wv.vocab.get(w, None):
-                        self.voc.append(w)
-            elif type(custom_vocab)==list:
-                self.V = len(custom_vocab)
-                self.voc=[]
-                for w in custom_vocab:
-                    if self.model.wv.vocab.get(w, None):
-                        self.voc.append(w)
-            else:
-                raise ValueError("Option custom_vocab must be either a list of words/phrases or 'default'.")
-        else:
-            self.V = voc_size
-            self.voc = self.sorted_vocab()        
+        self.voc = self.sorted_vocab(min_count, max_count, max_features)
+        self.V = len(self.voc)   
+        self.pca = dr
+        self.max = Z.max(axis=0)
+        self.min = Z.min(axis=0)
         self.sims = self.compute_sims()
-        self.dimreduce = Z
-        self.word_correlations = self.combine()
+        self.dim1 = rev1
+        self.dim2 = rev2
         
-    def sorted_vocab(self):
-
+    def sorted_vocab(self, min_count=100, max_count=10000, max_features=10000):
         wordlist=[]
         for word, vocab_obj in self.model.wv.vocab.items():
             wordlist.append((word, vocab_obj.count))
         wordlist = sorted(wordlist, key=lambda tup: tup[1], reverse=True)
-        return [w for w,c in wordlist[0:self.V]]
+        return [w for w,c in wordlist if c>min_count and c<max_count and w.count('_')<3][0:max_features]
     
     def compute_sims(self):
 
-        total_dim = self.P + self.V
-        z = np.zeros((total_dim, self.M))     
-        index = 0
-        for p in self.parties:
-            z[index,:] = self.model.docvecs[p]
-            index+=1
-        for v in self.voc:
-            z[index,:] = self.model.wv[v]
-            index+=1
-        C = pd.DataFrame(cosine_similarity(z)[0:self.P,self.P:total_dim], columns = self.voc)
-        C['party_label'] = self.labels
-        return C
+        Z = np.zeros((self.V, 2))
+        for idx, w in enumerate(self.voc):
+            Z[idx, :] = self.pca.transform(self.model.wv[w].reshape(1,-1))
+        sims_right = euclidean_distances(Z, np.array([self.max[0],0]).reshape(1, -1))
+        sims_left = euclidean_distances(Z, np.array([self.min[0],0]).reshape(1, -1))
+        sims_up = euclidean_distances(Z, np.array([0,self.max[1]]).reshape(1, -1))
+        sims_down = euclidean_distances(Z, np.array([0,self.min[1]]).reshape(1, -1))
+        temp = pd.DataFrame({'word': self.voc, 'right': sims_right[:,0], 'left': sims_left[:,0], 'up': sims_up[:,0], 'down': sims_down[:,0]})
+        return temp
 
     def combine(self):
 
@@ -71,54 +54,55 @@ class Interpret(object):
             dimscores.append((v,c1,c2))
         return pd.DataFrame(dimscores, columns=['word','corr1','corr2'])
         
-    def top_words(self, topn=20):
-
-        temp = self.word_correlations.sort_values(by='corr1')
-        print("Words positively correlated with dimension 1:\n")
-        self.top_positive_dim1 = reversed(temp.word.tolist()[-topn:])
-        for w in self.top_positive_dim1:
-            w=w.replace('_',' ')
-            print(w)
-        print()
-        print("Words negatively correlated with dimension 1:\n")
-        self.top_negative_dim1 = temp.word.tolist()[0:topn]
-        for w in self.top_negative_dim1:
-            w=w.replace('_',' ')
-            print(w)
-        temp = self.word_correlations.sort_values(by='corr2')
-        print()
-        print("Words positively correlated with dimension 2:\n")
-        self.top_positive_dim2 = reversed(temp.word.tolist()[-topn:])
-        for w in self.top_positive_dim2:
-            w=w.replace('_',' ')
-            print(w)
-        print()
-        print("Words negatively correlated with dimension 2:\n")
-        self.top_negative_dim2 = temp.word.tolist()[0:topn]
-        for w in self.top_negative_dim2:
-            w=w.replace('_',' ')
-            print(w)
-
     def top_words_list(self, topn=20):
 
-        temp = self.word_correlations.sort_values(by='corr1')
-        print("Words positively correlated with dimension 1:\n")
-        self.top_positive_dim1 = reversed(temp.word.tolist()[-topn:])
-        self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
-        print(self.top_positive_dim1)
-        print()
-        print("Words negatively correlated with dimension 1:\n")
-        self.top_negative_dim1 = temp.word.tolist()[0:topn]
-        self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
-        print(self.top_negative_dim1)
-        temp = self.word_correlations.sort_values(by='corr2')
-        print()
-        print("Words positively correlated with dimension 2:\n")
-        self.top_positive_dim2 = reversed(temp.word.tolist()[-topn:])
-        self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
-        print(self.top_positive_dim2)
-        print()
-        print("Words negatively correlated with dimension 2:\n")
-        self.top_negative_dim2 = temp.word.tolist()[0:topn]
-        self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
-        print(self.top_negative_dim2)
+        if self.dim1:
+            temp = self.sims.sort_values(by='left')
+            print("Words associated with positive values on dimension 1:\n")
+            self.top_positive_dim1 = temp.word.tolist()[0:topn]
+            self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
+            print(self.top_positive_dim1)
+            print()
+            temp = self.sims.sort_values(by='right')
+            print("Words associated with negative values on dimension 1:\n")
+            self.top_negative_dim1 = temp.word.tolist()[0:topn]
+            self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
+            print(self.top_negative_dim1)
+            print()
+        else:
+            temp = self.sims.sort_values(by='right')
+            print("Words associated with positive values on dimension 1:\n")
+            self.top_positive_dim1 = temp.word.tolist()[0:topn]
+            self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
+            print(self.top_positive_dim1)
+            print()
+            temp = self.sims.sort_values(by='left')
+            print("Words associated with negative values on dimension 1:\n")
+            self.top_negative_dim1 = temp.word.tolist()[0:topn]
+            self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
+            print(self.top_negative_dim1)
+            print()
+        if self.dim2:
+            temp = self.sims.sort_values(by='down')
+            print("Words associated with positive values on dimension 2:\n")
+            self.top_positive_dim2 = temp.word.tolist()[0:topn]
+            self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
+            print(self.top_positive_dim2)
+            print()
+            temp = self.sims.sort_values(by='up')
+            print("Words associated with negative values on dimension 2:\n")
+            self.top_negative_dim2 = temp.word.tolist()[0:topn]
+            self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
+            print(self.top_negative_dim2)
+        else:
+            temp = self.sims.sort_values(by='up')
+            print("Words associated with positive values on dimension 2:\n")
+            self.top_positive_dim2 = temp.word.tolist()[0:topn]
+            self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
+            print(self.top_positive_dim2)
+            print()
+            temp = self.sims.sort_values(by='down')
+            print("Words associated with negative values on dimension 2:\n")
+            self.top_negative_dim2 = temp.word.tolist()[0:topn]
+            self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
+            print(self.top_negative_dim2)
