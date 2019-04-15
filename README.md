@@ -6,7 +6,8 @@ Scripts to fit and explore word embedding models augmented with political metada
 
 This is a pre-release of the replication scripts for the study cited below.
 
-To download the pre-trained models, use the following link: https://drive.google.com/open?id=17DWO_2UyjEZ9HnH3AACSdH3JZLpvb4bP
+To download the pre-trained models, use the following link: 
+https://drive.google.com/open?id=17DWO_2UyjEZ9HnH3AACSdH3JZLpvb4bP
 
 Make sure to extract the model files in the 'models' directory, i.e.:
 ```
