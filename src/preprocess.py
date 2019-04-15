@@ -13,7 +13,7 @@ import sys
 #
 # Description:
 # A script to preprocess political texts, with procedural stop word removal.
-# For reference; see example.
+# For more information, see www.github.com/lrheault/partyembed
 #
 # Usage:
 # python3 preprocess.py [USA/Canada/UK]
@@ -98,7 +98,7 @@ if __name__=="__main__":
                 idx+=1
                 if idx%100000==0:
                     print("Processed %d lines." %idx)
-                
+
     """
     Example usage, assuming an input file with one speech per line:
 

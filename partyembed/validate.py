@@ -24,7 +24,7 @@ class Validate(object):
         self.method = method
         self.custom_lexicon = custom_lexicon
         self.label_dict = party_labels(self.country)
-        _, self.parties, _ = party_tags(self.model, self.country)
+        _, self.parties, _, _ = party_tags(self.model, self.country)
         self.labels = [self.label_dict[p] for p in self.parties]
         self.P = len(self.parties)
         self.components = 1
@@ -59,29 +59,27 @@ class Validate(object):
             if Z[Z.label=='Labour 2010'].score.values[0] > Z[Z.label=='Cons 2010'].score.values[0]:
                 Z['score'] = Z.score * (-1)
 
-        input_file = DATA_PATH + 'goldstandard_' + self.country.lower() + '.csv'
-        ref = pd.read_table(input_file, sep=',',encoding='utf-8',header=0)
         if self.country=='USA':
-            ref = ref[ref.chamber==self.chamber]            
+            input_file = DATA_PATH + 'goldstandard_' + self.chamber.lower() + '.csv'
+        else:
+            input_file = DATA_PATH + 'goldstandard_' + self.country.lower() + '.csv'            
+        ref = pd.read_csv(input_file)
         ref = ref.merge(Z, on='label', how='left')
         return ref
 
-    def accuracy(self, goldscores, testscores):
-
-        gold=[]; test=[];
-        for i in range(1,len(goldscores)):
-            for j in range(i+1,len(goldscores)):
-                if goldscores[i]>=goldscores[j]:
-                    gold.append(1)
-                else:
-                    gold.append(0)
-        for i in range(1,len(testscores)):
-            for j in range(i+1,len(testscores)):
-                if testscores[i]>=testscores[j]:
-                    test.append(1)
-                else:
-                    test.append(0)
-        return metrics.accuracy_score(gold, test)*100
+    def accuracy(self, gold, test):
+        assert len(gold)==len(test)
+        pairs = 0
+        correct = 0
+        # Loop over unique pairs.
+        for i in range(len(test)):
+            for j in range(i+1,len(test)):
+                # Count pairs correctly ordered.
+                if np.sign(gold[i]-gold[j])==np.sign(test[i]-test[j]):
+                    correct += 1
+                pairs += 1
+        # Return pairwise accuracy as percentage.
+        return (correct/pairs)*100
 
     def correlation_scores(self):
 

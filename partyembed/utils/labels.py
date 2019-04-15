@@ -7,6 +7,11 @@ USA_COL = {'dem': '#3333FF', 'rep': '#E91D0E'}
 CA_COL = {'lib': '#D71920', 'con': '#1A4782', 'ndp': '#F28000', 'bloc': '#33B2CC', 'ref': '#3CB371'}
 UK_COL = {'lab': '#D50000', 'con': '#0087DC', 'lib': '#FDBB3A'}
 
+# Markers
+USA_MK = {'dem': 'o', 'rep': 's'}
+CA_MK = {'lib': 's', 'con': '^', 'ndp': 'o', 'bloc': 'D', 'ref': 'x'}
+UK_MK = {'lab': 'o', 'con': '^', 'lib': 's'}
+
 # Full party names.
 USA_NAMES = {'dem':'Democrats', 'rep':'Republicans'}
 UK_NAMES = {'con':'Conservatives','lib':'Liberal-Democrats','lab':'Labour'}
@@ -43,15 +48,16 @@ def party_labels(country):
     else:
         raise ValueError("The country must be 'USA', 'Canada' or 'UK'.")
 
-def party_tags(model, country):
+def party_tags(model, country, grayscale=False):
 
     if country=='USA':
-        democrats = [d for d in model.docvecs.offset2doctag if d.startswith('D_')] 
-        republicans = [d for d in model.docvecs.offset2doctag if d.startswith('R_')] 
+        democrats = [d for d in model.docvecs.offset2doctag if d.startswith('D_')]
+        republicans = [d for d in model.docvecs.offset2doctag if d.startswith('R_')]
         parties = democrats + republicans
         cols = [USA_COL['dem']]*len(democrats) + [USA_COL['rep']]*len(republicans)
+        mkers = [USA_MK['dem']]*len(democrats) + [USA_MK['rep']]*len(republicans)
         fullnames = [USA_NAMES['dem']]*len(democrats) + [USA_NAMES['rep']]*len(republicans)
-        return (fullnames, parties, cols)
+        return (fullnames, parties, cols, mkers)
     elif country=='Canada':
         ndp = [d for d in model.docvecs.offset2doctag if 'NDP' in d]
         bloc = [d for d in model.docvecs.offset2doctag if 'Bloc' in d]
@@ -60,17 +66,20 @@ def party_tags(model, country):
         reform = [d for d in model.docvecs.offset2doctag if 'Reform-Alliance' in d]
         parties = ndp + bloc + liberals + conservatives + reform
         cols = [CA_COL['ndp']]*len(ndp) + [CA_COL['bloc']]*len(bloc) + \
-                [CA_COL['lib']]*len(liberals) + [CA_COL['con']]*len(conservatives) + [CA_COL['ref']]*len(reform)
+               [CA_COL['lib']]*len(liberals) + [CA_COL['con']]*len(conservatives) + [CA_COL['ref']]*len(reform)
+        mkers = [CA_MK['ndp']]*len(ndp) + [CA_MK['bloc']]*len(bloc) + \
+               [CA_MK['lib']]*len(liberals) + [CA_MK['con']]*len(conservatives) + [CA_MK['ref']]*len(reform)
         fullnames = [CA_NAMES['ndp']]*len(ndp) + [CA_NAMES['bloc']]*len(bloc) + \
-                [CA_NAMES['lib']]*len(liberals) + [CA_NAMES['con']]*len(conservatives) + [CA_NAMES['ref']]*len(reform)
-        return (fullnames, parties, cols)
+               [CA_NAMES['lib']]*len(liberals) + [CA_NAMES['con']]*len(conservatives) + [CA_NAMES['ref']]*len(reform)
+        return (fullnames, parties, cols, mkers)
     elif country=='UK':
         labour = [d for d in model.docvecs.offset2doctag if 'Lab' in d]
         liberals = [d for d in model.docvecs.offset2doctag if 'Lib' in d]
         conservatives = [d for d in model.docvecs.offset2doctag if 'Con' in d]
-        parties = labour + liberals + conservatives 
+        parties = labour + liberals + conservatives
         cols = [UK_COL['lab']]*len(labour) + [UK_COL['lib']]*len(liberals) + [UK_COL['con']]*len(conservatives)
+        mkers = [UK_MK['lab']]*len(labour) + [UK_MK['lib']]*len(liberals) + [UK_MK['con']]*len(conservatives)
         fullnames = [UK_NAMES['lab']]*len(labour) + [UK_NAMES['lib']]*len(liberals) + [UK_NAMES['con']]*len(conservatives)
-        return (fullnames, parties, cols)
+        return (fullnames, parties, cols, mkers)
     else:
         raise ValueError("The country must be 'USA', 'Canada' or 'UK'.")

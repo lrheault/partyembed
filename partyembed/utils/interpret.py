@@ -44,65 +44,43 @@ class Interpret(object):
         temp = pd.DataFrame({'word': self.voc, 'right': sims_right[:,0], 'left': sims_left[:,0], 'up': sims_up[:,0], 'down': sims_down[:,0]})
         return temp
 
-    def combine(self):
-
-        self.sims = self.sims.merge(self.dimreduce, on='party_label', how='left')
-        dimscores = []
-        for v in self.voc:
-            c1=self.sims.dim1.corr(self.sims[v])
-            c2=self.sims.dim2.corr(self.sims[v])
-            dimscores.append((v,c1,c2))
-        return pd.DataFrame(dimscores, columns=['word','corr1','corr2'])
-        
     def top_words_list(self, topn=20):
 
         if self.dim1:
-            temp = self.sims.sort_values(by='left')
-            print("Words associated with positive values on dimension 1:\n")
-            self.top_positive_dim1 = temp.word.tolist()[0:topn]
-            self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
-            print(self.top_positive_dim1)
-            print()
-            temp = self.sims.sort_values(by='right')
-            print("Words associated with negative values on dimension 1:\n")
-            self.top_negative_dim1 = temp.word.tolist()[0:topn]
-            self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
-            print(self.top_negative_dim1)
-            print()
+            ordering = ['left','right']
         else:
-            temp = self.sims.sort_values(by='right')
-            print("Words associated with positive values on dimension 1:\n")
-            self.top_positive_dim1 = temp.word.tolist()[0:topn]
-            self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
-            print(self.top_positive_dim1)
-            print()
-            temp = self.sims.sort_values(by='left')
-            print("Words associated with negative values on dimension 1:\n")
-            self.top_negative_dim1 = temp.word.tolist()[0:topn]
-            self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
-            print(self.top_negative_dim1)
-            print()
+            ordering = ['right', 'left']
+        temp = self.sims.sort_values(by=ordering[0])
+        print(80*"-")
+        print("Words Associated with Positive Values (Right) on First Component:")
+        print(80*"-")
+        self.top_positive_dim1 = temp.word.tolist()[0:topn]
+        self.top_positive_dim1 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim1])
+        print(self.top_positive_dim1)
+        temp = self.sims.sort_values(by=ordering[1])
+        print(80*"-")
+        print("Words Associated with Negative Values (Left) on First Component:")
+        print(80*"-")
+        self.top_negative_dim1 = temp.word.tolist()[0:topn]
+        self.top_negative_dim1 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim1])
+        print(self.top_negative_dim1)
+
         if self.dim2:
-            temp = self.sims.sort_values(by='down')
-            print("Words associated with positive values on dimension 2:\n")
-            self.top_positive_dim2 = temp.word.tolist()[0:topn]
-            self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
-            print(self.top_positive_dim2)
-            print()
-            temp = self.sims.sort_values(by='up')
-            print("Words associated with negative values on dimension 2:\n")
-            self.top_negative_dim2 = temp.word.tolist()[0:topn]
-            self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
-            print(self.top_negative_dim2)
+            ordering = ['down','up']
         else:
-            temp = self.sims.sort_values(by='up')
-            print("Words associated with positive values on dimension 2:\n")
-            self.top_positive_dim2 = temp.word.tolist()[0:topn]
-            self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
-            print(self.top_positive_dim2)
-            print()
-            temp = self.sims.sort_values(by='down')
-            print("Words associated with negative values on dimension 2:\n")
-            self.top_negative_dim2 = temp.word.tolist()[0:topn]
-            self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
-            print(self.top_negative_dim2)
+            ordering = ['up', 'down']
+        temp = self.sims.sort_values(by=ordering[0])
+        print(80*"-")
+        print("Words Associated with Positive Values (North) on Second Component:")
+        print(80*"-")
+        self.top_positive_dim2 = temp.word.tolist()[0:topn]
+        self.top_positive_dim2 = ', '.join([w.replace('_',' ') for w in self.top_positive_dim2])
+        print(self.top_positive_dim2)
+        temp = self.sims.sort_values(by=ordering[1])
+        print(80*"-")
+        print("Words Associated with Negative Values (South) on Second Component:")
+        print(80*"-")
+        self.top_negative_dim2 = temp.word.tolist()[0:topn]
+        self.top_negative_dim2 = ', '.join([w.replace('_',' ') for w in self.top_negative_dim2])
+        print(self.top_negative_dim2)
+        print(80*"-")

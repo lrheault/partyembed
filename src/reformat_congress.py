@@ -6,7 +6,7 @@ import csv
 
 #==================================================================================================#
 #
-# Script to convert the Stanford Congress corpus into a tab-separated file with utf-8 encoding.
+# Script to convert the Stanford Congressional Record corpus into a tab-separated file with utf-8 encoding.
 #
 # Output format:
 # 0: Congress

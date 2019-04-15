@@ -4,7 +4,8 @@
 #=====================================================================#
 #
 # Description:
-# A sript to fit word embeddings with political metadata.
+# An example sript to fit word embeddings with political metadata.
+# For more information, see www.github.com/lrheault/partyembed
 #
 # Usage:
 # python3 partyembeddings_house.py

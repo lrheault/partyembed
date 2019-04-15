@@ -49,12 +49,11 @@ class Explore(object):
         self.reverse_dim1 = False; self.reverse_dim2 = False
         self.method = method
         self.label_dict = party_labels(self.country)
-        self.fullnames, self.parties, self.cols = party_tags(self.model, self.country)
+        self.fullnames, self.parties, self.cols, self.mkers = party_tags(self.model, self.country)
         self.labels = [self.label_dict[p] for p in self.parties]
         self.P = len(self.parties)
         self.components = dimensions
         self.placement = self.dimension_reduction()
-
 
     def dimension_reduction(self):
 
