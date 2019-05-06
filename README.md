@@ -4,10 +4,9 @@ Scripts to fit and explore word embedding models augmented with political metada
 
 ## Description
 
-This is a pre-release of the replication scripts for the study cited below.
+This is a release of materials for the study cited below.  We will post developments on this page as time permits.
 
-To download the pre-trained models, use the following link: 
-https://drive.google.com/open?id=17DWO_2UyjEZ9HnH3AACSdH3JZLpvb4bP
+To download the pre-trained models, use this [link](https://drive.google.com/open?id=17DWO_2UyjEZ9HnH3AACSdH3JZLpvb4bP).  Additional information can be found on the [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/K0OYQF).
 
 Make sure to extract the model files in the 'models' directory, i.e.:
 ```
@@ -20,17 +19,15 @@ The src/ directory contains example scripts to process the raw corpora and fit a
 
 ## Citation
 
-An earlier version of our manuscript was presented at the 2018 Conference of the Society for Political Methodology. The reference will be updated in the future. 
+Please cite the following paper if using these materials:  
 
-Ludovic Rheault and Christopher Cochrane.  2018.  Word Embeddings for the Estimation of Ideological Placement in Parliamentary Corpora. Presented at the 35th annual meeting of the Society for Political Methodology, Provo, Utah, July 18-21.
+Ludovic Rheault and Christopher Cochrane.  Forthcoming.  [Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora.](https://ludovicrheault.weebly.com/uploads/3/9/4/0/39408253/rheaultcochrane2019_pa.pdf)  Political Analysis.
 
 ```
-@inproceedings{RHE18,
+@article{RHE19,
   author    = {Ludovic Rheault and Christopher Cochrane},
-  title     = {Word Embeddings for the Estimation of Ideological Placement in Parliamentary Corpora},
-  booktitle = {PolMeth 2018},
-  year      = {2018},
-  address   = {Provo, UT},
-  publisher = {Society for Political Methodology},
+  title     = {Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora},
+  journal   = {Political Analysis},
+  year      = {2019}  
 }
 ```
