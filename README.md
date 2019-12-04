@@ -24,10 +24,13 @@ Please cite the following paper if using these materials:
 Ludovic Rheault and Christopher Cochrane.  Forthcoming.  [Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora.](https://ludovicrheault.weebly.com/uploads/3/9/4/0/39408253/rheaultcochrane2019_pa.pdf)  Political Analysis.
 
 ```
-@article{RHE19,
+@article{RHE20,
   author    = {Ludovic Rheault and Christopher Cochrane},
   title     = {Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora},
   journal   = {Political Analysis},
-  year      = {2019}  
+  year      = {2020},
+  volume    = {28},
+  number    = {1},
+  pages     = {112-133}
 }
 ```
