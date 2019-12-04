@@ -21,7 +21,7 @@ The src/ directory contains example scripts to process the raw corpora and fit a
 
 Please cite the following paper if using these materials:  
 
-Ludovic Rheault and Christopher Cochrane.  Forthcoming.  [Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora.](https://ludovicrheault.weebly.com/uploads/3/9/4/0/39408253/rheaultcochrane2019_pa.pdf)  Political Analysis.
+Ludovic Rheault and Christopher Cochrane.  2020.  [Word Embeddings for the Analysis of Ideological Placement in Parliamentary Corpora.](https://ludovicrheault.weebly.com/uploads/3/9/4/0/39408253/rheaultcochrane2019_pa.pdf)  Political Analysis 28(1): 112-133.
 
 ```
 @article{RHE20,
