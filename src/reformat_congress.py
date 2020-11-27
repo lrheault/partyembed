@@ -8,7 +8,7 @@ import csv
 #
 # Script to convert the Stanford Congressional Record corpus into a tab-separated file with utf-8 encoding.
 #
-# Output format:
+# Output format with have the following columns:
 # 0: Congress
 # 1: Speech ID
 # 2: Raw text
@@ -20,6 +20,9 @@ import csv
 # 8: Majority Party (0/1)
 # 9: Presidential Party (0/1)
 #
+# An example row from the reformatted corpus, with text abbreviated:
+# 114\t1140112244\tMr. Speaker. I rise today...\t114118980\tMIKE_COFFMAN\tH\tCO\tR\t1\t0\n
+# 
 #==================================================================================================#
 
 # Adjust the paths to actual location.
