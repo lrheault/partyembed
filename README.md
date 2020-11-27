@@ -15,7 +15,7 @@ tar xvzf partyembed_models.tar.gz -C partyembed/partyembed/models
 
 The scripts are organized as a Python module, and functionalities will be added in this version.  Consult the file examples.ipynb for a tutorial.
 
-The src/ directory contains example scripts to process the raw corpora and fit augmented embedding models on political texts.
+The src/ directory contains example scripts to process the raw corpora and fit augmented embedding models on political texts.  The three scripts in that directory illustrate how to replicate the embeddings model for the US House.
 
 ## Citation
 
