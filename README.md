@@ -4,7 +4,7 @@ Scripts to fit and explore word embedding models augmented with political metada
 
 ## Description
 
-This is a release of materials for the study cited below.  We will post developments on this page as time permits.
+This is a release of archive materials for the study cited below.
 
 To download the pre-trained models, use this [link](https://drive.google.com/open?id=17DWO_2UyjEZ9HnH3AACSdH3JZLpvb4bP).  Additional information can be found on the [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/K0OYQF).
 
